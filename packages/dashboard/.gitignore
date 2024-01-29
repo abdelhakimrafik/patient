@@ -1,0 +1,4 @@
+# vite build files
+dist
+dist-ssr
+*.local

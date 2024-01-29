@@ -1,0 +1,49 @@
+{
+  "name": "patient",
+  "private": true,
+  "type": "module",
+  "description": "Patient management system",
+  "author": "Abdelhakim RAFIK",
+  "license": "UNLICENSED",
+  "keywords": [
+    "patient",
+    "react.js",
+    "node.js",
+    "redux",
+    "nestjs",
+    "postgresql",
+    "redis"
+  ],
+  "scripts": {
+    "dashboard:dev": "yarn workspace dashboard dev",
+    "dashboard:build": "yarn workspace dashboard build",
+    "dashboard:lint": "yarn workspace dashboard lint",
+    "dashboard:test": "yarn workspace dashboard test",
+    "api:dev": "yarn workspace api start:dev",
+    "api:build": "yarn workspace api build",
+    "api:lint": "yarn workspace api lint",
+    "api:test": "yarn workspace api test"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.4",
+    "typescript": "^5.2.2"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdelhakimrafik/patient.git"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "yarn@4.0.2"
+}
