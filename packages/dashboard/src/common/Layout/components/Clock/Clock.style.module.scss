@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+
+  > span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #50799e;
+    font-size: 18px;
+  }
+
+  .date {
+    text-transform: capitalize;
+  }
+}
