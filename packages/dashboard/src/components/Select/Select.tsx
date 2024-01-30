@@ -7,8 +7,14 @@ type TSelectItem = {
 };
 
 export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
+  /**
+   * Select oprtions
+   */
   items: TSelectItem[];
 
+  /**
+   * Text color
+   */
   color?: string;
 };
 
