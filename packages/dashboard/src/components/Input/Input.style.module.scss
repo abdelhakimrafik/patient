@@ -1,0 +1,43 @@
+.container {
+}
+
+.label {
+  display: block;
+  color: #50799e;
+  font-weight: 500;
+  margin-block-end: 6px;
+}
+.required {
+  color: #1aa5c0;
+}
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-inline: 5px;
+  border-width: 1.5px;
+  border-color: #adbfcf;
+  border-style: solid;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.focused {
+  border-color: #50799e;
+}
+.input {
+  flex: 1;
+  font-size: 16px;
+  height: 40px;
+  border: none;
+  &:focus-visible {
+    outline: none;
+  }
+}
+.clicable {
+  cursor: pointer;
+}
+.error {
+  color: #ff0000;
+  font-size: 14px;
+  margin-block-start: 3px;
+}

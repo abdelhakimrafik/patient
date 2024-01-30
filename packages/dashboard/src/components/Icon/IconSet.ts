@@ -1,0 +1,15 @@
+export enum IconSet {
+  Eye = 'eye',
+  Calendar = 'calendar',
+  Horloge = 'horloge',
+  CalendarAlt = 'calendar-alt',
+  Filter = 'filter',
+  UserPlus = 'user-plus',
+  Pencil = 'pencil',
+  PencilAlt = 'pencil-alt',
+  Screen = 'screen',
+  ChevronRight = 'chevron-right',
+  ChevronDown = 'chevron-down',
+  ChevronDouble = 'chevron-double',
+  Humberger = 'humberger',
+}

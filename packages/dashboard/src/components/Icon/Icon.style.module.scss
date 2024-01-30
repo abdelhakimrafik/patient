@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'Patient-icons';
+  src:
+    url('../fonts/Patient-icons.ttf') format('truetype'),
+    url('../fonts/Patient-icons.eot') format('embedded-opentype'),
+    url('../fonts/Patient-icons.woff') format('woff');
+}
+.ico {
+  font-family: 'Patient-icons' !important;
+  font-size: 18px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+$icons: (
+  'eye': '\ea01',
+  'calendar': '\ea02',
+  'horloge': '\ea03',
+  'calendar-alt': '\ea04',
+  'filter': '\ea05',
+  'user-plus': '\ea06',
+  'pencil': '\ea07',
+  'pencil-alt': '\ea08',
+  'screen': '\ea09',
+  'chevron-right': '\ea0a',
+  'chevron-down': '\ea0b',
+  'chevron-double': '\ea0c',
+  'humberger': '\ea0d',
+);
+@each $name, $glyph in $icons {
+  .#{$name}:before {
+    content: $glyph;
+  }
+}
