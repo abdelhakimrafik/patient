@@ -11,8 +11,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         const isDevMode =
           configService.get<string>('app.nodeEnv') === 'development';
 
-        console.log('CONFIG >>', configService.get('database'));
-
         return {
           type: 'postgres',
           host: configService.get<string>('database.host'),
