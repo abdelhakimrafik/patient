@@ -1,18 +1,10 @@
-import Input from './components/Input';
+import Layout from './common/Layout';
+import Login from './pages/Login';
 
 export default function App() {
   return (
-    <div style={{ padding: 15 }}>
-      <Input
-        type="text"
-        label="First name"
-        iconLeft="Calendar"
-        iconRight="Eye"
-        placeholder="Test place holder"
-        onIconRightClick={() => console.log('clicked')}
-        required
-        error="Error message here"
-      />
-    </div>
+    <Layout style={{ padding: 15 }}>
+      <Login />
+    </Layout>
   );
 }

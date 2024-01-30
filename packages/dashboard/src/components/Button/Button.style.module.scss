@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #1aa5c0;
+  color: #fff;
+  font-weight: 500;
+  gap: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten(#1aa5c0, 5%);
+  }
+
+  &.disabled {
+    background-color: #e5e5e5;
+    cursor: auto;
+    color: #858585;
+  }
+
+  &.full {
+    width: 100%;
+  }
+}

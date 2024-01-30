@@ -11,6 +11,16 @@ export type IconProps = {
   name: TIconName;
 
   /**
+   * Icon color
+   */
+  color?: string;
+
+  /**
+   * Icon size
+   */
+  size?: string | number;
+
+  /**
    * Icon classname style
    */
   className?: string;
@@ -18,11 +28,23 @@ export type IconProps = {
   onClick?: () => void;
 };
 
-export default function Icon({ name, className, onClick }: IconProps) {
+export default function Icon({
+  name,
+  color,
+  size,
+  className,
+  onClick,
+}: IconProps): React.JSX.Element {
+  const iconStyle = {
+    color,
+    fontSize: size,
+  };
+
   return (
     <i
-      className={clsx('ico', css[IconSet[name]], className)}
+      className={clsx(css.ico, css[IconSet[name]], className)}
       onClick={onClick}
+      style={iconStyle}
     ></i>
   );
 }

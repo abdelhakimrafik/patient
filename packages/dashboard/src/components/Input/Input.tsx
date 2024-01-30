@@ -29,8 +29,14 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
    */
   iconRight?: TIconName;
 
+  /**
+   * Icon left click handler
+   */
   onIconLeftClick?: () => void;
 
+  /**
+   * Icon rigth click handler
+   */
   onIconRightClick?: () => void;
 
   /**
@@ -44,7 +50,7 @@ export default function Input({
   label,
   labelStyle,
   iconLeft,
-  iconRight,
+  iconRight: userIconRight,
   onIconLeftClick,
   onIconRightClick,
   error,
@@ -52,15 +58,26 @@ export default function Input({
   required,
   ...rest
 }: InputProps): React.JSX.Element {
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const isPasswordInput = type === 'password';
+  const [isSecure, setIsSecure] = useState<boolean>(isPasswordInput);
+  const iconRight: TIconName | undefined = isPasswordInput
+    ? 'Eye'
+    : userIconRight;
+
+  const handleIconRightClick = () => {
+    if (isPasswordInput) {
+      setIsSecure((state) => !state);
+    }
+    onIconRightClick?.();
+  };
 
   return (
-    <div className={css.container}>
+    <div>
       <label className={clsx(css.label, labelStyle)}>
         {label}
         {required ? <span className={css.required}>*</span> : null}
       </label>
-      <div className={clsx(css.wrapper, isFocused && css.focused)}>
+      <div className={css.wrapper}>
         {iconLeft ? (
           <Icon
             name={iconLeft}
@@ -69,18 +86,16 @@ export default function Input({
           />
         ) : null}
         <input
-          type={type}
+          type={isPasswordInput ? (isSecure ? 'password' : 'text') : type}
           disabled={disabled}
           required={required}
           className={css.input}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
           {...rest}
         />
         {iconRight ? (
           <Icon
             name={iconRight}
-            onClick={onIconRightClick}
+            onClick={handleIconRightClick}
             className={clsx(onIconRightClick && css.clicable)}
           />
         ) : null}
