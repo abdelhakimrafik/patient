@@ -2,7 +2,8 @@ import { Control, Controller } from 'react-hook-form';
 import Input, { InputProps } from './Input';
 
 export type InputWithFormHookProps = InputProps & {
-  control: Control;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
   controllerName: string;
 };
 
@@ -19,7 +20,7 @@ export default function InputWithFormHook({
       render={({ field: { onChange, value }, fieldState: { error } }) => (
         <Input
           onChange={(e) => (onChange(e.target.value), onTextChange?.(e))}
-          value={value}
+          value={value ?? ''}
           error={error?.message}
           {...rest}
         />

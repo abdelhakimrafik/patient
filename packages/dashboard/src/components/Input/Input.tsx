@@ -77,7 +77,7 @@ export default function Input({
         {label}
         {required ? <span className={css.required}>*</span> : null}
       </label>
-      <div className={css.wrapper}>
+      <div className={clsx(css.wrapper, error && css.errorBorder)}>
         {iconLeft ? (
           <Icon
             name={iconLeft}

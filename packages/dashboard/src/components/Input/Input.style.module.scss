@@ -21,6 +21,10 @@
   &:focus-within {
     border-color: #50799e;
   }
+
+  &.errorBorder {
+    border-color: #ff0000;
+  }
 }
 .input {
   flex: 1;
