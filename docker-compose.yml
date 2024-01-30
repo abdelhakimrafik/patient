@@ -3,29 +3,31 @@ services:
   redis:
     image: redis
     networks:
-      - webnet
+      - default_network
   db:
     image: postgres
     networks:
-      - webnet
+      - default_network
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_USER: user
-      POSTGRES_DB: db_name
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
   api:
-    image: api_image_name
+    build: ./packages/api
+    depends_on:
+      - db
+      - redis
     ports:
       - '3000:3000'
     networks:
-      - webnet
+      - default_network
     environment:
       DB_HOST: db
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
       REDIS_HOST: redis
-  dashboard:
-    image: dashboard_image_name
-    ports:
-      - '80:3000'
-    networks:
-      - webnet
+      REDIS_KEY_PREFIX: ${REDIS_KEY_PREFIX}
 networks:
-  webnet:
+  default_network:
+    driver: bridge

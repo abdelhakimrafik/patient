@@ -4,6 +4,3 @@
 # Tests
 /coverage
 /.nyc_output
-
-# Env files
-.env
