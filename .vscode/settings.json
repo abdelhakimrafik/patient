@@ -3,5 +3,17 @@
     "**/.yarn": true,
     "**/.pnp.*": true,
     "**/node_modules": true
-  }
+  },
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "server": "127.0.0.1",
+      "port": 5432,
+      "askForPassword": true,
+      "driver": "PostgreSQL",
+      "name": "postgresDb",
+      "database": "patient",
+      "username": "user"
+    }
+  ]
 }
