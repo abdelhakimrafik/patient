@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Document } from './document.entity';
 import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
 import { PageDto } from 'src/common/dto/page.dto';
@@ -26,6 +26,7 @@ export class DocumentsService extends PageService {
     return await this.paginate(this.documentRepository, {
       filter: pageFilter,
       relations: { patient: { insurance: true } },
+      where: this.createWhereQuery(pageFilter),
     });
   }
 
@@ -42,5 +43,25 @@ export class DocumentsService extends PageService {
   async delete(id: string): Promise<boolean> {
     const deleteResult = await this.documentRepository.delete(id);
     return deleteResult.affected > 0;
+  }
+
+  private createWhereQuery(params: PageFilterDto) {
+    let where: any;
+
+    if (params.keyword) {
+      where = [
+        {
+          patient: { firstName: ILike(`%${params.keyword}%`) },
+        },
+        {
+          patient: { lastName: ILike(`%${params.keyword}%`) },
+        },
+        {
+          patient: { cardId: ILike(`%${params.keyword}%`) },
+        },
+      ];
+    }
+
+    return where;
   }
 }
