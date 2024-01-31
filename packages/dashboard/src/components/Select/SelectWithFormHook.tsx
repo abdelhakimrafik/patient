@@ -3,7 +3,8 @@ import { Control, Controller } from 'react-hook-form';
 import Select, { SelectProps } from './Select';
 
 export type SelectWithFormHookProps = SelectProps & {
-  control: Control;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>;
   controllerName: string;
 };
 

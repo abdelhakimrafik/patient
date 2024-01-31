@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Grid from '../../../components/Grid';
 import DataTable, { TColumns } from '../../../components/DataTable';
 import Input from '../../../components/Input';
 import { IDocument } from '../../../redux/api/types';
-import { useGetDocumentsQuery } from '../../../redux/api/documentApi';
+import { useLazyGetDocumentsQuery } from '../../../redux/api/documentApi';
 import SearchIcon from '../../../assets/images/search';
 import css from './PatientsList.style.module.scss';
 
@@ -44,17 +44,24 @@ export default function PatientsList(): React.JSX.Element | null {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [keyword, setKeyword] = useState<string>();
-  const { data, isLoading, isSuccess } = useGetDocumentsQuery({
-    page: currentPage,
-    pageSize: 2,
-    keyword,
-  });
+  const [getDocuments, { data, isLoading, isSuccess }] =
+    useLazyGetDocumentsQuery();
 
   const handleSearch = () => {
-    const value = inputRef.current?.value;
-    setKeyword(value);
+    const keyword = inputRef.current?.value;
+    getDocuments({
+      page: currentPage,
+      pageSize: 7,
+      keyword,
+    });
   };
+
+  useEffect(() => {
+    getDocuments({
+      page: currentPage,
+      pageSize: 7,
+    });
+  }, []);
 
   if (isLoading) return null;
 
@@ -79,16 +86,17 @@ export default function PatientsList(): React.JSX.Element | null {
             iconLeft="Filter"
             borderType="circle"
             className={css.filterBtn}
-            onClick={() => handleSearch()}
+            onClick={handleSearch}
           />
         </Grid>
         <Button
           text="Nouveau dossier"
           borderType="circle"
           iconLeft="UserPlus"
+          onClick={() => navigate('/patients/add')}
         />
       </Grid>
-      {isSuccess ? (
+      {data && isSuccess ? (
         <DataTable
           values={data.data}
           columns={columns}

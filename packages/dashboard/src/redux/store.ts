@@ -4,6 +4,7 @@ import { authApi } from './api/authApi';
 import { userApi } from './api/userApi';
 import { patientApi } from './api/patientApi';
 import { documentApi } from './api/documentApi';
+import { insuranceApi } from './api/insuranceApi';
 import authReducer from './features/authSlice';
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
     [userApi.reducerPath]: userApi.reducer,
     [patientApi.reducerPath]: patientApi.reducer,
     [documentApi.reducerPath]: documentApi.reducer,
+    [insuranceApi.reducerPath]: insuranceApi.reducer,
     authState: authReducer,
   },
   // devTools: import.meta.env.VITE_NODE_ENV === 'development',
@@ -22,6 +24,7 @@ export const store = configureStore({
       userApi.middleware,
       patientApi.middleware,
       documentApi.middleware,
+      insuranceApi.middleware,
     ]),
 });
 

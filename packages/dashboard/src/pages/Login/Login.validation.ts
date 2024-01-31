@@ -4,7 +4,7 @@ const requiredField = 'Ce champ est obligatoire';
 const wrongEmail = 'Votre email est incorrect';
 
 /**
- * Login form resolver
+ * Login form schema
  */
 export const loginSchema = object({
   email: string()

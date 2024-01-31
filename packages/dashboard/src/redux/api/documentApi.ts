@@ -28,7 +28,20 @@ export const documentApi = createApi({
         return { ...page, data: transformedData };
       },
     }),
+    createDocument: builder.mutation({
+      query(data) {
+        return {
+          url: 'documents',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetDocumentsQuery } = documentApi;
+export const {
+  useGetDocumentsQuery,
+  useLazyGetDocumentsQuery,
+  useCreateDocumentMutation,
+} = documentApi;

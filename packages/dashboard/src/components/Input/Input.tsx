@@ -17,7 +17,12 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   /**
    * Label text style
    */
-  labelStyle?: React.StyleHTMLAttributes<HTMLLabelElement>;
+  labelStyle?: React.CSSProperties;
+
+  /**
+   * Style for the container
+   */
+  containerStyle?: React.CSSProperties;
 
   /**
    * Icon to use for the left side of the input
@@ -50,6 +55,7 @@ function Input(
     type = 'text',
     label,
     labelStyle,
+    containerStyle,
     iconLeft,
     iconRight: userIconRight,
     onIconLeftClick,
@@ -58,6 +64,7 @@ function Input(
     disabled,
     required,
     className,
+    style,
     ...rest
   }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
@@ -76,14 +83,17 @@ function Input(
   };
 
   return (
-    <>
+    <div style={containerStyle}>
       {label ? (
         <label className={clsx(css.label, labelStyle)}>
           {label}
           {required ? <span className={css.required}>*</span> : null}
         </label>
       ) : null}
-      <div className={clsx(css.wrapper, error && css.errorBorder, className)}>
+      <div
+        className={clsx(css.wrapper, error && css.errorBorder, className)}
+        style={style}
+      >
         {iconLeft ? (
           <Icon
             name={iconLeft}
@@ -108,7 +118,7 @@ function Input(
         ) : null}
       </div>
       {error ? <div className={css.error}>{error}</div> : null}
-    </>
+    </div>
   );
 }
 

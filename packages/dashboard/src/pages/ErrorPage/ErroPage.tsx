@@ -1,14 +1,10 @@
-import { useRouteError } from 'react-router-dom';
+import css from './ErrorPage.style.module.scss';
 
 export default function ErrorPage() {
-  const error = useRouteError() as Record<string, string>;
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
-        <i>{error.statusText || error.message}</i>
-      </p>
+    <div className={css.container}>
+      <h1>Oops! 404</h1>
+      <p>Page not found.</p>
     </div>
   );
 }

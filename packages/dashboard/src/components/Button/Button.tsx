@@ -56,7 +56,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const borderTypes = {
   default: 3,
-  rounded: 15,
+  rounded: 10,
   circle: 45,
 };
 
@@ -73,6 +73,7 @@ export default function Button({
   className,
   onClick,
   children,
+  style,
   ...rest
 }: ButtonProps): React.JSX.Element {
   const borderRadius = borderType
@@ -83,6 +84,7 @@ export default function Button({
     color,
     fontSize: size,
     borderRadius,
+    ...style,
   };
 
   return (

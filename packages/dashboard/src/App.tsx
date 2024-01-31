@@ -1,6 +1,6 @@
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import Layout from './Layout';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ErrorPage from './pages/ErrorPage';
 
 /**
@@ -13,29 +13,24 @@ const Login = lazy(() => import('./pages/Login'));
  */
 const PatientsList = lazy(() => import('./pages/Patients/PatientsList'));
 const PatientPreview = lazy(() => import('./pages/Patients/PatientPreview'));
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Layout fill />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/',
-        element: <PatientsList />,
-      },
-      {
-        path: '/patients/preview/:id',
-        element: <PatientPreview />,
-      },
-    ],
-  },
-]);
+const PatientAdd = lazy(() => import('./pages/Patients/PatientAdd'));
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <BrowserRouter>
+      <Suspense fallback={<Layout />}>
+        <Routes>
+          <Route path="/auth" element={<Layout />}>
+            <Route path="login" element={<Login />} />
+          </Route>
+          <Route path="/" element={<Layout fill />}>
+            <Route path="/" element={<PatientsList />} />
+            <Route path="/patients/preview/:id" element={<PatientPreview />} />
+            <Route path="/patients/add" element={<PatientAdd />} />
+          </Route>
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 }

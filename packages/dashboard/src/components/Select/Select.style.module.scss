@@ -1,4 +1,13 @@
-.container {
+.label {
+  display: block;
+  color: #50799e;
+  font-weight: 500;
+  margin-block-end: 6px;
+}
+.required {
+  color: #1aa5c0;
+}
+.select {
   display: flex;
   align-items: center;
   gap: 5px;
@@ -7,6 +16,7 @@
   border-color: #adbfcf;
   border-style: solid;
   border-radius: 8px;
+  background: none;
   width: 100%;
   font-size: 16px;
 

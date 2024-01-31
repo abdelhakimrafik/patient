@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import css from './Select.style.module.scss';
 
-type TSelectItem = {
+export type TSelectItem = {
   name: string;
   value?: string;
 };
@@ -13,6 +13,16 @@ export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
   items: TSelectItem[];
 
   /**
+   * Label text to use for input
+   */
+  label?: string;
+
+  /**
+   * Label text style
+   */
+  labelStyle?: React.StyleHTMLAttributes<HTMLLabelElement>;
+
+  /**
    * Text color
    */
   color?: string;
@@ -20,23 +30,35 @@ export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
 
 export default function Select({
   items,
+  label,
+  labelStyle,
   color,
+  required,
   className,
   ...rest
 }: SelectProps): React.JSX.Element {
   const selectStyle = { color };
 
   return (
-    <select
-      className={clsx(css.container, className)}
-      style={selectStyle}
-      {...rest}
-    >
-      {items.map((item, index) => (
-        <option key={`si-${index}`} value={item.value ?? item.name}>
-          {item.name}
-        </option>
-      ))}
-    </select>
+    <div>
+      {label ? (
+        <label className={clsx(css.label, labelStyle)}>
+          {label}
+          {required ? <span className={css.required}>*</span> : null}
+        </label>
+      ) : null}
+      <select
+        className={clsx(css.select, className)}
+        style={selectStyle}
+        required={required}
+        {...rest}
+      >
+        {items.map((item, index) => (
+          <option key={`si-${index}`} value={item.value ?? item.name}>
+            {item.name}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 }
