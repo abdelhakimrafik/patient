@@ -1,3 +1,4 @@
+import { Outlet } from 'react-router-dom';
 import clsx from 'clsx';
 import Clock from './components/Clock';
 import css from './Layout.style.module.scss';
@@ -9,10 +10,7 @@ export type LayoutProps = React.HTMLAttributes<HTMLDivElement> & {
   fill?: boolean;
 };
 
-export default function Layout({
-  fill,
-  children,
-}: LayoutProps): React.JSX.Element {
+export default function Layout({ fill }: LayoutProps): React.JSX.Element {
   return (
     <div className={clsx(css.container, fill && css.filledBg)}>
       <header className={css.header}>
@@ -20,7 +18,9 @@ export default function Layout({
         <Clock />
         <div></div>
       </header>
-      <div className={css.wrapper}>{children}</div>
+      <main className={css.wrapper}>
+        <Outlet />
+      </main>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Icon from '../../../../components/Icon';
+import Icon from '../../../components/Icon';
 import css from './Clock.style.module.scss';
 
 export default function Clock(): React.JSX.Element {
