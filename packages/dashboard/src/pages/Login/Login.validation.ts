@@ -1,5 +1,4 @@
-import * as Yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string } from 'zod';
 
 const requiredField = 'Ce champ est obligatoire';
 const wrongEmail = 'Votre email est incorrect';
@@ -7,13 +6,11 @@ const wrongEmail = 'Votre email est incorrect';
 /**
  * Login form resolver
  */
-export const loginResolver = yupResolver(
-  Yup.object({
-    email: Yup.string()
-      .trim()
-      // TODO: implement i18n for validation messages
-      .email(wrongEmail)
-      .required(requiredField),
-    password: Yup.string().required(requiredField),
-  }),
-);
+export const loginSchema = object({
+  email: string()
+    .trim()
+    // TODO: implement i18n for validation messages
+    .min(1, requiredField)
+    .email(wrongEmail),
+  password: string().min(1, requiredField),
+});

@@ -1,26 +1,29 @@
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { TypeOf } from 'zod';
 import Button from '../../components/Button';
 import { InputWithFormHook as Input } from '../../components/Input';
 import Select from '../../components/Select';
-import { loginResolver } from './Login.validation';
+import { loginSchema } from './Login.validation';
 import css from './Login.style.module.scss';
+import { useLoginUserMutation } from '../../redux/api/authApi';
 
 const select1Data = [{ name: 'UM Amezmiz' }];
 const select2Data = [{ name: 'BOX 1' }];
 
-type TFormInput = {
-  email: string;
-  password: string;
-};
+export type TLoginFormData = TypeOf<typeof loginSchema>;
 
 export default function Login(): React.JSX.Element {
-  const { control, handleSubmit } = useForm<TFormInput>({
+  const { control, handleSubmit } = useForm<TLoginFormData>({
     mode: 'all',
-    resolver: loginResolver,
+    resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data: TFormInput) => {
-    console.log('>>', data);
+  // { isLoading, isSuccess, error, isError }
+  const [loginUser] = useLoginUserMutation();
+
+  const onSubmit = (data: TLoginFormData) => {
+    loginUser(data);
   };
 
   return (
