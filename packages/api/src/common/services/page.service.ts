@@ -1,4 +1,4 @@
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsSelect, FindOptionsWhere, Repository } from 'typeorm';
 import { PageFilterDto } from '../dto/pageFilter.dto';
 import { SortOrder } from '../enum/sortOrder.enum';
 import { PageDto } from '../dto/page.dto';
@@ -19,9 +19,11 @@ export class PageService {
   protected async paginate<T>(
     repository: Repository<T>,
     filter: PageFilterDto,
+    select?: FindOptionsSelect<T>,
     where?: FindOptionsWhere<T>,
   ): Promise<PageDto<T>> {
     const [result, total] = await repository.findAndCount({
+      select,
       order: this.createOrderQuery(filter),
       skip: (filter.page - 1) * filter.pageSize,
       take: filter.pageSize,

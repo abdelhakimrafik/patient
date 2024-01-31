@@ -25,6 +25,16 @@ export class PatientsService extends PageService {
     return await this.paginate(
       this.patientRepository,
       pageFilter,
+      {
+        id: true,
+        firstName: true,
+        lastName: true,
+        birthday: true,
+        gender: true,
+        cardId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       this.createWhereQuery(pageFilter),
     );
   }
