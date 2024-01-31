@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
           username: configService.get<string>('database.username'),
           password: configService.get<string>('database.password'),
           database: configService.get<string>('database.database'),
-          migrations: [`${__dirname}/migrations/*.ts`],
+          entities: [path.join(__dirname, '/../**/*.entity.ts')],
+          // migrations: [`${__dirname}/migrations/*.ts`],
           autoLoadEntities: true,
           synchronize: isDevMode,
           migrationsRun: true,

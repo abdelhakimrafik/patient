@@ -4,6 +4,7 @@ import {
   IsPhoneNumber,
   IsDate,
   IsNotEmpty,
+  IsUUID,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Gender } from '../../common/enum/gender.enum';
@@ -43,4 +44,8 @@ export class CreatePatientDto {
   @ApiProperty()
   @IsString()
   public additionalAddress: string;
+
+  @ApiProperty()
+  @IsUUID()
+  public insurance: string;
 }

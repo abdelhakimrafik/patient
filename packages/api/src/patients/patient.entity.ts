@@ -1,8 +1,10 @@
-import { Column, Entity, Index } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 import { AbstractEntity } from 'src/common/entities/abstractEntity.entity';
 import { Gender } from '../common/enum/gender.enum';
+import { Document } from 'src/documents/document.entity';
+import { Insurance } from 'src/insurances/insurance.entity';
 
-@Entity()
+@Entity({ name: 'patients' })
 export class Patient extends AbstractEntity {
   @Index({ fulltext: true })
   @Column({ name: 'first_name' })
@@ -30,4 +32,12 @@ export class Patient extends AbstractEntity {
 
   @Column({ name: 'additional_address' })
   public additionalAddress: string;
+
+  @ManyToOne(() => Insurance, (insurance) => insurance.patients)
+  public insurance: Insurance;
+
+  @OneToMany(() => Document, (document) => document.patient, {
+    orphanedRowAction: 'delete',
+  })
+  public documents: Document[];
 }

@@ -8,11 +8,13 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { PatientsService } from './patients.service';
 import { CreatePatientDto } from './dto/createPatient.dot';
 import { UpdatePatientDto } from './dto/updatePatient.dto';
 import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
 
+@ApiBearerAuth('access-token')
 @Controller('patients')
 export class PatientsController {
   constructor(private readonly patientsService: PatientsService) {}

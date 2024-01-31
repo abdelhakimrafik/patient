@@ -4,6 +4,7 @@ import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { Public } from './decorators/public.decorator';
 import { ActiveUser } from 'src/common/decorators/activeUser.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +24,7 @@ export class AuthController {
     return this.authService.signUp(signUpDto);
   }
 
+  @ApiBearerAuth('access-token')
   @HttpCode(HttpStatus.OK)
   @Post('signout')
   signOut(@ActiveUser('id') userId: string) {

@@ -7,25 +7,29 @@ import { CreatePatientDto } from './dto/createPatient.dot';
 import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
 import { PageService } from 'src/common/services/page.service';
 import { PageDto } from 'src/common/dto/page.dto';
+import { InsurancesService } from 'src/insurances/insurances.service';
 
 @Injectable()
 export class PatientsService extends PageService {
   constructor(
     @InjectRepository(Patient)
     private readonly patientRepository: Repository<Patient>,
+    private readonly insurancesService: InsurancesService,
   ) {
     super();
   }
 
   async findOne(id: string): Promise<Patient | undefined> {
-    return await this.patientRepository.findOneBy({ id });
+    return await this.patientRepository.findOne({
+      where: { id },
+      relations: { insurance: true },
+    });
   }
 
   async findAll(pageFilter: PageFilterDto): Promise<PageDto<Patient>> {
-    return await this.paginate(
-      this.patientRepository,
-      pageFilter,
-      {
+    return await this.paginate(this.patientRepository, {
+      filter: pageFilter,
+      select: {
         id: true,
         firstName: true,
         lastName: true,
@@ -35,12 +39,17 @@ export class PatientsService extends PageService {
         createdAt: true,
         updatedAt: true,
       },
-      this.createWhereQuery(pageFilter),
-    );
+      where: this.createWhereQuery(pageFilter),
+    });
   }
 
   async create(createPatientDto: CreatePatientDto): Promise<Patient> {
-    const createPatient = this.patientRepository.create(createPatientDto);
+    const { insurance: insuranceId, ...patientData } = createPatientDto;
+    const insurance = await this.insurancesService.findOne(insuranceId);
+    const createPatient = this.patientRepository.create({
+      insurance: insurance,
+      ...patientData,
+    });
     return await this.patientRepository.save(createPatient);
   }
 

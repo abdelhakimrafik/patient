@@ -11,6 +11,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { RedisModule } from './redis/redis.module';
+import { InsurancesModule } from './insurances/insurances.module';
+import { DocumentsModule } from './documents/documents.module';
 import redisConfig from './config/redis.config';
 
 @Module({
@@ -25,6 +27,8 @@ import redisConfig from './config/redis.config';
     PatientsModule,
     AuthModule,
     RedisModule,
+    InsurancesModule,
+    DocumentsModule,
   ],
   providers: [
     {

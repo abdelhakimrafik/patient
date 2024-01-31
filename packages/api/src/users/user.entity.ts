@@ -2,7 +2,7 @@ import { BeforeInsert, Column, Entity } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { AbstractEntity } from 'src/common/entities/abstractEntity.entity';
 
-@Entity({ name: 'user' })
+@Entity({ name: 'users' })
 export class User extends AbstractEntity {
   @Column({ unique: true })
   public email: string;
