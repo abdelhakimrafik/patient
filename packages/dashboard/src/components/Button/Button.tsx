@@ -87,8 +87,13 @@ export default function Button({
 
   return (
     <button
-      className={clsx(css.container, full && css.full, className)}
       style={containerStyle}
+      className={clsx(
+        css.container,
+        full && css.full,
+        disabled && css.disabled,
+        className,
+      )}
       onClick={!disabled ? onClick : undefined}
       {...rest}
     >
