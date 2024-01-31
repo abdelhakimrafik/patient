@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TypeOf } from 'zod';
@@ -7,6 +9,8 @@ import Select from '../../components/Select';
 import { loginSchema } from './Login.validation';
 import css from './Login.style.module.scss';
 import { useLoginUserMutation } from '../../redux/api/authApi';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../../redux/features/authSlice';
 
 const select1Data = [{ name: 'UM Amezmiz' }];
 const select2Data = [{ name: 'BOX 1' }];
@@ -14,17 +18,35 @@ const select2Data = [{ name: 'BOX 1' }];
 export type TLoginFormData = TypeOf<typeof loginSchema>;
 
 export default function Login(): React.JSX.Element {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { control, handleSubmit } = useForm<TLoginFormData>({
     mode: 'all',
     resolver: zodResolver(loginSchema),
   });
 
   // { isLoading, isSuccess, error, isError }
-  const [loginUser] = useLoginUserMutation();
+  const [loginUser, { isLoading, isSuccess }] = useLoginUserMutation();
 
-  const onSubmit = (data: TLoginFormData) => {
-    loginUser(data);
+  const onSubmit = async (data: TLoginFormData) => {
+    try {
+      const payload = await loginUser(data).unwrap();
+      dispatch(
+        setCredentials({
+          access_token: payload.access_token,
+          refresh_token: payload.refresh_token,
+        }),
+      );
+    } catch (e) {
+      console.log('ERR', e);
+    }
   };
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigate('/');
+    }
+  }, [isSuccess, navigate]);
 
   return (
     <div className={css.container}>
@@ -49,6 +71,7 @@ export default function Login(): React.JSX.Element {
         text="Connexion"
         iconRight="ChevronDouble"
         className={css.submitBtn}
+        disabled={isLoading}
         onClick={handleSubmit(onSubmit)}
       />
     </div>
