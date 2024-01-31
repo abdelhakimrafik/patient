@@ -16,7 +16,7 @@ const PatientsList = lazy(() => import('./pages/Patients/PatientsList'));
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <Layout fill />,
     errorElement: <ErrorPage />,
     children: [
       {

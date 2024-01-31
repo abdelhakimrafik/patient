@@ -3,14 +3,14 @@ import Button from '../../../components/Button';
 import Grid from '../../../components/Grid';
 import DataTable, { TColumns } from '../../../components/DataTable';
 import Input from '../../../components/Input';
-import { useGetPatientsQuery } from '../../../redux/api/patientApi';
-import { IPatient } from '../../../redux/api/types';
+import { IDocument } from '../../../redux/api/types';
+import { useGetDocumentsQuery } from '../../../redux/api/documentApi';
 import SearchIcon from '../../../assets/images/search';
 import css from './PatientsList.style.module.scss';
 
-const columns: TColumns<IPatient>[] = [
+const columns: TColumns<IDocument>[] = [
   {
-    name: 'Date d’ouverture du dossier',
+    name: "Date d'ouverture du dossier",
     key: 'createdAt',
     transform: (item) => new Date(item.createdAt).toLocaleDateString('fr-FR'),
   },
@@ -21,7 +21,11 @@ const columns: TColumns<IPatient>[] = [
     key: 'birthday',
     transform: (item) => new Date(item.birthday).toLocaleDateString('fr-FR'),
   },
-  { name: 'Sexe', key: 'gender' },
+  {
+    name: 'Sexe',
+    key: 'gender',
+    transform: (item) => item.gender.toUpperCase(),
+  },
   { name: 'N°CINE', key: 'cardId' },
   { name: 'Couverture', key: 'insurance' },
   {
@@ -39,11 +43,13 @@ export default function PatientsList(): React.JSX.Element | null {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const [keyword, setKeyword] = useState<string>();
-  const { data, isLoading, isSuccess } = useGetPatientsQuery({
+  const { data, isLoading, isSuccess } = useGetDocumentsQuery({
     page: currentPage,
     pageSize: 2,
     keyword,
   });
+
+  console.log('#>', data);
 
   const handleSearch = () => {
     const value = inputRef.current?.value;

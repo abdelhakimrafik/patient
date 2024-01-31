@@ -16,16 +16,29 @@ export interface IUser {
   updated_at: string;
 }
 
-export interface IPatient {
+export interface IInsurance {
+  name: string;
+}
+
+export interface IPatient<InsuranceType = string> {
   id: string;
   firstName: string;
   lastName: string;
   birthday: string;
   gender: string;
   cardId: string;
+  insurance: InsuranceType;
+}
+
+export interface IDocumentApiResponse {
+  patient: IPatient<IInsurance>;
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IDocument
+  extends IPatient,
+    Omit<IDocumentApiResponse, 'patient'> {}
 
 export interface IPage<T> {
   page: number;
