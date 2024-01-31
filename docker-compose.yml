@@ -28,6 +28,9 @@ services:
       DB_NAME: ${DB_NAME}
       REDIS_HOST: redis
       REDIS_KEY_PREFIX: ${REDIS_KEY_PREFIX}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ACCESS_TOKEN_TTL: ${JWT_ACCESS_TOKEN_TTL}
+
 networks:
   default_network:
     driver: bridge
