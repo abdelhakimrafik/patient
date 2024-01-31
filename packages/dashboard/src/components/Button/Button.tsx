@@ -11,7 +11,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   /**
    * Wether the button border is rounded or like circle
    */
-  borderType?: 'rounded' | 'circle';
+  borderType?: 'default' | 'rounded' | 'circle';
 
   /**
    * Text to use for button
@@ -55,7 +55,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const borderTypes = {
-  default: 5,
+  default: 3,
   rounded: 15,
   circle: 45,
 };

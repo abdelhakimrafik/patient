@@ -1,23 +1,20 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import customFetchBase from './customFetchBase';
-import { IPage, IPageFilter, IPatient } from './types';
+import { IInsurance, IPatient } from './types';
 
 export const patientApi = createApi({
   reducerPath: 'patientApi',
   baseQuery: customFetchBase,
   endpoints: (builder) => ({
-    getPatients: builder.query<IPage<IPatient>, IPageFilter>({
+    getPatient: builder.query<IPatient<IInsurance>, { id: string }>({
       query(params) {
         return {
-          url: 'patients',
+          url: `patients/${params.id}`,
           params,
         };
-      },
-      transformResponse: (result: IPage<IPatient>) => {
-        return result;
       },
     }),
   }),
 });
 
-export const { useGetPatientsQuery } = patientApi;
+export const { useGetPatientQuery, useLazyGetPatientQuery } = patientApi;

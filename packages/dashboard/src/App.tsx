@@ -12,6 +12,7 @@ const Login = lazy(() => import('./pages/Login'));
  * Private pages
  */
 const PatientsList = lazy(() => import('./pages/Patients/PatientsList'));
+const PatientPreview = lazy(() => import('./pages/Patients/PatientPreview'));
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <PatientsList />,
+      },
+      {
+        path: '/patients/preview/:id',
+        element: <PatientPreview />,
       },
     ],
   },

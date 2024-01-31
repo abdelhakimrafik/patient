@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button';
 import Grid from '../../../components/Grid';
 import DataTable, { TColumns } from '../../../components/DataTable';
@@ -40,6 +41,7 @@ const columns: TColumns<IDocument>[] = [
 ];
 
 export default function PatientsList(): React.JSX.Element | null {
+  const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const inputRef = useRef<HTMLInputElement>(null);
   const [keyword, setKeyword] = useState<string>();
@@ -48,8 +50,6 @@ export default function PatientsList(): React.JSX.Element | null {
     pageSize: 2,
     keyword,
   });
-
-  console.log('#>', data);
 
   const handleSearch = () => {
     const value = inputRef.current?.value;
@@ -95,7 +95,7 @@ export default function PatientsList(): React.JSX.Element | null {
           emptyMessage="Aucune donnée à afficher"
           pagination={{ page: data.page, totalPage: data.totalPage }}
           onPageChange={(page) => setCurrentPage(page)}
-          onRowClick={(item) => console.log(item)}
+          onRowClick={(item) => navigate(`/patients/preview/${item.id}`)}
         />
       ) : null}
     </div>

@@ -28,6 +28,9 @@ export interface IPatient<InsuranceType = string> {
   gender: string;
   cardId: string;
   insurance: InsuranceType;
+  phone: string;
+  address: string;
+  additionalAddress: string;
 }
 
 export interface IDocumentApiResponse {
