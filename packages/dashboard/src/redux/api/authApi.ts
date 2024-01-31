@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { TLoginFormData } from '../../pages/Login';
 import customFetchBase from './customFetchBase';
-import { userApi } from './userApi';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -17,14 +16,6 @@ export const authApi = createApi({
           method: 'POST',
           body: data,
         };
-      },
-      async onQueryStarted(_args, { dispatch, queryFulfilled }) {
-        try {
-          await queryFulfilled;
-          await dispatch(userApi.endpoints.getMe.initiate(null));
-        } catch (error) {
-          console.log('ERROR', error);
-        }
       },
     }),
     logoutUser: builder.mutation<void, void>({

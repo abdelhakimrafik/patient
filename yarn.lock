@@ -3492,6 +3492,7 @@ __metadata:
     zod: "npm:^3.22.4"
   peerDependencies:
     eslint: ^8.55.0
+    typescript: ^5.2.2
   languageName: unknown
   linkType: soft
 

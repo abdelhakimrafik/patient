@@ -1,0 +1,15 @@
+node_modules
+
+# Vite build files
+dist
+dist-ssr
+*.local
+
+# Developement files
+.eslintrc.*
+Dockerfile
+.env
+
+# Github files
+.gitignore
+README.md

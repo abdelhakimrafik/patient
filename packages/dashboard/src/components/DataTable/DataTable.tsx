@@ -29,7 +29,7 @@ export default function DataTable<T extends object>({
   pagination,
   emptyMessage,
   className,
-  renderItem = defaultRenderItem,
+  renderItem,
   onPageChange,
   onRowClick,
 }: DataTableProps<T>): React.JSX.Element {
@@ -58,7 +58,8 @@ export default function DataTable<T extends object>({
                 onClick={() => onRowClick?.(item)}
                 className={clsx(onRowClick && css.clicableRow)}
               >
-                {renderItem(item, columns)}
+                {renderItem?.(item, columns) ??
+                  defaultRenderItem(item, columns)}
               </tr>
             ))}
           </tbody>
