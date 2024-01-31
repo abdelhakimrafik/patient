@@ -5,9 +5,10 @@
   background-image: url('../../assets/images/background.png');
   background-size: cover;
   padding: 25px 40px;
+  overflow: hidden;
 
   .header {
-    background-color: #ffffff;
+    background: linear-gradient(89deg, #fdfdfd 8.29%, #eefcfd 98.21%);
     display: flex;
     justify-content: space-between;
     padding-block: 25px;
@@ -18,5 +19,16 @@
   .wrapper {
     display: grid;
     flex: 1;
+    overflow: auto;
+  }
+
+  &.filledBg {
+    gap: 25px;
+
+    .wrapper {
+      background: linear-gradient(89deg, #fdfdfd 8.29%, #eefcfd 98.21%);
+      border-radius: 15px;
+      box-shadow: 2.857px 3.809px 3.809px #0d88b4;
+    }
   }
 }

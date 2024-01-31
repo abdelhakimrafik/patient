@@ -56,6 +56,7 @@ export default function Input({
   error,
   disabled,
   required,
+  className,
   ...rest
 }: InputProps): React.JSX.Element {
   const isPasswordInput = type === 'password';
@@ -72,12 +73,14 @@ export default function Input({
   };
 
   return (
-    <div>
-      <label className={clsx(css.label, labelStyle)}>
-        {label}
-        {required ? <span className={css.required}>*</span> : null}
-      </label>
-      <div className={clsx(css.wrapper, error && css.errorBorder)}>
+    <>
+      {label ? (
+        <label className={clsx(css.label, labelStyle)}>
+          {label}
+          {required ? <span className={css.required}>*</span> : null}
+        </label>
+      ) : null}
+      <div className={clsx(css.wrapper, error && css.errorBorder, className)}>
         {iconLeft ? (
           <Icon
             name={iconLeft}
@@ -101,6 +104,6 @@ export default function Input({
         ) : null}
       </div>
       {error ? <div className={css.error}>{error}</div> : null}
-    </div>
+    </>
   );
 }

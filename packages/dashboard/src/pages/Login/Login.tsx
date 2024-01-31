@@ -42,6 +42,7 @@ export default function Login(): React.JSX.Element {
         placeholder="Tapez votre mot de passe"
       />
       <Button
+        full
         text="Connexion"
         iconRight="ChevronDouble"
         className={css.submitBtn}

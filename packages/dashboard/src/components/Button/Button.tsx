@@ -9,6 +9,11 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   full?: boolean;
 
   /**
+   * Wether the button border is rounded or like circle
+   */
+  borderType?: 'rounded' | 'circle';
+
+  /**
    * Text to use for button
    */
   text?: string;
@@ -49,8 +54,15 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   onIconRightClick?: () => void;
 };
 
+const borderTypes = {
+  default: 5,
+  rounded: 15,
+  circle: 45,
+};
+
 export default function Button({
-  full = true,
+  full,
+  borderType,
   text,
   size,
   color,
@@ -63,7 +75,15 @@ export default function Button({
   children,
   ...rest
 }: ButtonProps): React.JSX.Element {
-  const containerStyle = { backgroundColor, color, fontSize: size };
+  const borderRadius = borderType
+    ? borderTypes[borderType]
+    : borderTypes.default;
+  const containerStyle = {
+    backgroundColor,
+    color,
+    fontSize: size,
+    borderRadius,
+  };
 
   return (
     <button
