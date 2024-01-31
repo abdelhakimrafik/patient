@@ -1,5 +1,17 @@
 .container {
   padding: 30px 45px;
+  display: flex;
+  flex-direction: column;
+
+  .left {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    color: #50799e;
+    font-size: 25px;
+    font-style: normal;
+    font-weight: 500;
+  }
 
   .inputFilter {
     border-radius: 45px;

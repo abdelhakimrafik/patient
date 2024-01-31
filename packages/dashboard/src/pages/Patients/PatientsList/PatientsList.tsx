@@ -1,47 +1,57 @@
+import { useRef, useState } from 'react';
 import Button from '../../../components/Button';
 import Grid from '../../../components/Grid';
-import DataTable from '../../../components/DataTable';
+import DataTable, { TColumns } from '../../../components/DataTable';
 import Input from '../../../components/Input';
+import { useGetPatientsQuery } from '../../../redux/api/patientApi';
+import { IPatient } from '../../../redux/api/types';
+import SearchIcon from '../../../assets/images/search';
 import css from './PatientsList.style.module.scss';
 
-const data = [
+const columns: TColumns<IPatient>[] = [
   {
-    cin: 'PA2584',
-    firstname: 'Abdelhakim',
-    lastname: 'Rafik',
-    birthDay: '01/01/1996',
-    gender: 'M',
-    insurance: 'CNSS',
+    name: 'Date d’ouverture du dossier',
+    key: 'createdAt',
+    transform: (item) => new Date(item.createdAt).toLocaleDateString('fr-FR'),
   },
+  { name: 'Nom', key: 'lastName' },
+  { name: 'Prénom', key: 'firstName' },
   {
-    cin: 'PA2584',
-    firstname: 'Abdelhakim',
-    lastname: 'Rafik',
-    birthDay: '01/01/1996',
-    gender: 'M',
-    insurance: 'CNSS',
+    name: 'Date de naissance',
+    key: 'birthday',
+    transform: (item) => new Date(item.birthday).toLocaleDateString('fr-FR'),
   },
+  { name: 'Sexe', key: 'gender' },
+  { name: 'N°CINE', key: 'cardId' },
+  { name: 'Couverture', key: 'insurance' },
   {
-    cin: 'PA2584',
-    firstname: 'Abdelhakim',
-    lastname: 'Rafik',
-    birthDay: '01/01/1996',
-    gender: 'M',
-    insurance: 'CNSS',
-  },
-  {
-    cin: 'PA2584',
-    firstname: 'Abdelhakim',
-    lastname: 'Rafik',
-    birthDay: '01/01/1996',
-    gender: 'M',
-    insurance: 'CNSS',
+    name: 'Dernière mise à jour',
+    key: 'updatedAt',
+    transform: (item) =>
+      new Date(item.updatedAt).toLocaleString('fr-FR', {
+        dateStyle: 'short',
+        timeStyle: 'short',
+      }),
   },
 ];
 
-const columns = ['CIN', 'Nom', 'Prenom', 'Date naissance', 'Sex', 'Coverture'];
+export default function PatientsList(): React.JSX.Element | null {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [keyword, setKeyword] = useState<string>();
+  const { data, isLoading, isSuccess } = useGetPatientsQuery({
+    page: currentPage,
+    pageSize: 2,
+    keyword,
+  });
 
-export default function PatientsList(): React.JSX.Element {
+  const handleSearch = () => {
+    const value = inputRef.current?.value;
+    setKeyword(value);
+  };
+
+  if (isLoading) return null;
+
   return (
     <div className={css.container}>
       <Grid
@@ -49,9 +59,12 @@ export default function PatientsList(): React.JSX.Element {
         align="center"
         style={{ marginBlockEnd: 20 }}
       >
-        <div>Recherche des patients</div>
+        <div className={css.left}>
+          <SearchIcon /> Recherche des patients
+        </div>
         <Grid gap={15}>
           <Input
+            ref={inputRef}
             placeholder="Recherche par (Nom, Prénom CINE..)"
             className={css.inputFilter}
           />
@@ -60,6 +73,7 @@ export default function PatientsList(): React.JSX.Element {
             iconLeft="Filter"
             borderType="circle"
             className={css.filterBtn}
+            onClick={() => handleSearch()}
           />
         </Grid>
         <Button
@@ -68,11 +82,16 @@ export default function PatientsList(): React.JSX.Element {
           iconLeft="UserPlus"
         />
       </Grid>
-      <DataTable
-        values={data}
-        columns={columns}
-        pagination={{ page: 5, total: 6 }}
-      />
+      {isSuccess ? (
+        <DataTable
+          values={data.data}
+          columns={columns}
+          emptyMessage="Aucune donnée à afficher"
+          pagination={{ page: data.page, totalPage: data.totalPage }}
+          onPageChange={(page) => setCurrentPage(page)}
+          onRowClick={(item) => console.log(item)}
+        />
+      ) : null}
     </div>
   );
 }
