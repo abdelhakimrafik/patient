@@ -30,6 +30,17 @@ services:
       REDIS_KEY_PREFIX: ${REDIS_KEY_PREFIX}
       JWT_SECRET: ${JWT_SECRET}
       JWT_ACCESS_TOKEN_TTL: ${JWT_ACCESS_TOKEN_TTL}
+  dashboard:
+    build: ./packages/api
+    depends_on:
+      - api
+    ports:
+      - 80:5173
+    networks:
+      - default_network
+    environment:
+      VITE_SERVER_HOST: api
+      VITE_SERVER_PORT: 3000
 
 networks:
   default_network:

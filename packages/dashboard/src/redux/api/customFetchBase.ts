@@ -7,7 +7,7 @@ import {
 import { Mutex } from 'async-mutex';
 import { logout } from '../features/authSlice';
 
-const baseUrl = import.meta.env.VITE_SERVER_ENDPOINT;
+const baseUrl = `${import.meta.env.VITE_SERVER_HOST}:${import.meta.env.VITE_SERVER_PORT}`;
 
 // Create a new mutex
 const mutex = new Mutex();
