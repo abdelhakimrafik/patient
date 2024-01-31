@@ -1,7 +1,7 @@
+import { ForwardedRef, forwardRef, useState } from 'react';
 import clsx from 'clsx';
 import Icon, { TIconName } from '../Icon';
 import css from './Input.style.module.scss';
-import { useState } from 'react';
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   /**
@@ -45,20 +45,23 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
 };
 
-export default function Input({
-  type = 'text',
-  label,
-  labelStyle,
-  iconLeft,
-  iconRight: userIconRight,
-  onIconLeftClick,
-  onIconRightClick,
-  error,
-  disabled,
-  required,
-  className,
-  ...rest
-}: InputProps): React.JSX.Element {
+function Input(
+  {
+    type = 'text',
+    label,
+    labelStyle,
+    iconLeft,
+    iconRight: userIconRight,
+    onIconLeftClick,
+    onIconRightClick,
+    error,
+    disabled,
+    required,
+    className,
+    ...rest
+  }: InputProps,
+  ref: ForwardedRef<HTMLInputElement>,
+): React.JSX.Element {
   const isPasswordInput = type === 'password';
   const [isSecure, setIsSecure] = useState<boolean>(isPasswordInput);
   const iconRight: TIconName | undefined = isPasswordInput
@@ -89,6 +92,7 @@ export default function Input({
           />
         ) : null}
         <input
+          ref={ref}
           type={isPasswordInput ? (isSecure ? 'password' : 'text') : type}
           disabled={disabled}
           required={required}
@@ -107,3 +111,6 @@ export default function Input({
     </>
   );
 }
+
+const InputForwared = forwardRef(Input);
+export default InputForwared;
