@@ -80,8 +80,7 @@ docker-compose up
 - API Swagger Doc: http://localhost:3000/docs
 - Vite App: http://localhost:8080
 
-5. Create some insurance types
-   To be able to use the application you need to create some insurance type in the system, to do that open the swagger doc by visiting the following link
+5. To be able to use the application you need to create some insurance type in the system, to do that open the swagger doc by visiting the following link
 
 ```
 http://localhost:3000/docs
