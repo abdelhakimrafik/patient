@@ -5,7 +5,8 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query';
 import { Mutex } from 'async-mutex';
-import { logout } from '../features/authSlice';
+import { logout, setCredentials } from '../features/authSlice';
+import { ICredentials } from './types';
 
 const baseUrl = `${import.meta.env.VITE_SERVER_HOST}:${import.meta.env.VITE_SERVER_PORT}`;
 
@@ -24,11 +25,11 @@ const customFetchBase: BaseQueryFn<
   const isArgsString = typeof args === 'string';
   const { headers, ...rest } = isArgsString ? { headers: {} } : args;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const token = (api.getState() as any).authState.credentials?.access_token;
+  const tokens = (api.getState() as any).authState.credentials as ICredentials;
   const config: FetchArgs = {
     url: isArgsString ? args : args.url,
     headers: {
-      authorization: `Bearer ${token}`,
+      authorization: `Bearer ${tokens?.access_token}`,
       ...headers,
     },
     ...rest,
@@ -36,24 +37,38 @@ const customFetchBase: BaseQueryFn<
 
   await mutex.waitForUnlock();
   let result = await baseQuery(config, api, extraOptions);
+  console.log('###>', result);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  if ((result.error?.data as any)?.code === 401) {
+  if (result.error?.status === 401) {
     if (!mutex.isLocked()) {
       const release = await mutex.acquire();
 
       try {
         const refreshResult = await baseQuery(
-          { credentials: 'include', url: 'auth/refresh' },
+          {
+            url: 'auth/refresh',
+            method: 'POST',
+            body: { token: tokens.refresh_token },
+          },
           api,
           extraOptions,
         );
 
         if (refreshResult.data) {
-          result = await baseQuery(args, api, extraOptions);
+          const credentials = refreshResult.data as unknown as ICredentials;
+          api.dispatch(setCredentials(credentials));
+          const configAlt: FetchArgs = {
+            url: isArgsString ? args : args.url,
+            headers: {
+              authorization: `Bearer ${credentials.access_token}`,
+              ...headers,
+            },
+            ...rest,
+          };
+          result = await baseQuery(configAlt, api, extraOptions);
         } else {
           api.dispatch(logout());
-          window.location.href = '/login';
+          window.location.href = '/auth/login';
         }
       } finally {
         release();
