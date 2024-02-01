@@ -18,10 +18,11 @@ export default function SelectWithFormHook({
     <Controller
       control={control}
       name={controllerName}
-      render={({ field: { onChange, value } }) => (
+      render={({ field: { onChange, value }, fieldState: { error } }) => (
         <Select
           onChange={(e) => (onChange(e.target.value), onValueChange?.(e))}
           value={value}
+          error={error?.message}
           {...rest}
         />
       )}

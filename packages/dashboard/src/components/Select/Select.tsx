@@ -26,6 +26,11 @@ export type SelectProps = React.SelectHTMLAttributes<HTMLSelectElement> & {
    * Text color
    */
   color?: string;
+
+  /**
+   * Input error message
+   */
+  error?: string;
 };
 
 export default function Select({
@@ -33,6 +38,7 @@ export default function Select({
   label,
   labelStyle,
   color,
+  error,
   required,
   className,
   ...rest
@@ -59,6 +65,7 @@ export default function Select({
           </option>
         ))}
       </select>
+      {error ? <div className={css.error}>{error}</div> : null}
     </div>
   );
 }
