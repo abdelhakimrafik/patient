@@ -5,6 +5,7 @@ import { SignUpDto } from './dto/signUp.dto';
 import { Public } from './decorators/public.decorator';
 import { ActiveUser } from 'src/common/decorators/activeUser.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -22,6 +23,13 @@ export class AuthController {
   @Post('signup')
   signUp(@Body() signUpDto: SignUpDto) {
     return this.authService.signUp(signUpDto);
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh')
+  refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refreshToken(refreshTokenDto.token);
   }
 
   @ApiBearerAuth('access-token')

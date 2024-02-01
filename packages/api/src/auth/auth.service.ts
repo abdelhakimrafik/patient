@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwtConfig from 'src/config/jwt.config';
 import { UsersService } from 'src/users/users.service';
-import { User } from 'src/users/user.entity';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
 import { RedisService } from 'src/redis/redis.service';
@@ -34,7 +33,7 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    return await this.generateAccessToken(user);
+    return await this.generateAuthorizationTokens(user.id);
   }
 
   async signUp(signUpDto: SignUpDto) {
@@ -45,18 +44,55 @@ export class AuthService {
     this.redisService.delete(`user-${userId}`);
   }
 
-  private async generateAccessToken(user: User) {
-    const tokenId = randomUUID();
-
-    await this.redisService.insert(`user-${user.id}`, tokenId);
-
-    const payload = { id: user.id, tokenId };
-    const accessToken = await this.jwtService.signAsync(payload, {
+  async refreshToken(refreshToken: string) {
+    const { id, tokenId } = await this.jwtService.verifyAsync(refreshToken, {
       secret: this.jwtConfiguration.secret,
-      expiresIn: this.jwtConfiguration.signOptions.expiresIn,
     });
-    return {
-      access_token: accessToken,
-    };
+
+    const isValidToken = await this.redisService.validate(
+      `refresh-${id}`,
+      tokenId,
+    );
+    if (!isValidToken) {
+      throw new UnauthorizedException('Refresh token is not valid');
+    }
+
+    return await this.generateAuthorizationTokens(id);
+  }
+
+  private async generateAuthorizationTokens(userId: string) {
+    const access_token = await this.generateToken(
+      'user',
+      userId,
+      { id: userId },
+      this.jwtConfiguration.signOptions.expiresIn,
+    );
+    const refresh_token = await this.generateToken(
+      'refresh',
+      userId,
+      { id: userId },
+      this.jwtConfiguration.refreshExpiresIn,
+    );
+
+    return { access_token, refresh_token };
+  }
+
+  private async generateToken(
+    prefix: string,
+    userId: string,
+    payload: Record<string, string>,
+    expiresIn: string | number,
+  ) {
+    const tokenId = randomUUID();
+    await this.redisService.insert(`${prefix}-${userId}`, tokenId);
+
+    const token = await this.jwtService.signAsync(
+      { ...payload, tokenId },
+      {
+        secret: this.jwtConfiguration.secret,
+        expiresIn,
+      },
+    );
+    return token;
   }
 }
