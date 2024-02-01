@@ -76,7 +76,7 @@ export default function PatientAdd(): React.JSX.Element {
           control={control}
           controllerName="birthday"
           label="Date de naissance"
-          placeholder="Date de naissance de patient"
+          placeholder="dd/mm/YYYY"
           required
         />
         <Select
@@ -111,7 +111,7 @@ export default function PatientAdd(): React.JSX.Element {
           control={control}
           controllerName="phone"
           label="Téléphone mobile"
-          placeholder="Téléphone mobile de patient"
+          placeholder="+212xxxxxxxxx"
           required
         />
         <Input

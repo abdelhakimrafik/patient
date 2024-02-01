@@ -20,6 +20,21 @@
     display: grid;
     flex: 1;
     overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 0 5px 5px 0;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #c2c2c2;
+      border-radius: 8px;
+    }
+    &::-webkit-scrollbar-thumb:hover {
+      background: #7a7a7a;
+    }
   }
 
   &.filledBg {
