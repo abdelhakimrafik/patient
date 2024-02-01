@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TypeOf } from 'zod';
@@ -25,8 +24,7 @@ export default function Login(): React.JSX.Element {
     resolver: zodResolver(loginSchema),
   });
 
-  // { isLoading, isSuccess, error, isError }
-  const [loginUser, { isLoading, isSuccess }] = useLoginUserMutation();
+  const [loginUser, { isLoading, error }] = useLoginUserMutation();
 
   const onSubmit = async (data: TLoginFormData) => {
     try {
@@ -37,16 +35,11 @@ export default function Login(): React.JSX.Element {
           refresh_token: payload.refresh_token,
         }),
       );
+      navigate('/');
     } catch (e) {
       console.log('ERR', e);
     }
   };
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate('/');
-    }
-  }, [isSuccess, navigate]);
 
   return (
     <div className={css.container}>
@@ -66,6 +59,9 @@ export default function Login(): React.JSX.Element {
         type="password"
         placeholder="Tapez votre mot de passe"
       />
+      {error ? (
+        <div className={css.error}>Email ou mot de passe est incorrect</div>
+      ) : null}
       <Button
         full
         text="Connexion"
@@ -74,6 +70,9 @@ export default function Login(): React.JSX.Element {
         disabled={isLoading}
         onClick={handleSubmit(onSubmit)}
       />
+      <Link to="/auth/signup" className={css.link}>
+        S'inscrire
+      </Link>
     </div>
   );
 }

@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ICredentials, IUser } from '../api/types';
 
-interface IAuthState {
+export interface IAuthState {
   user: IUser | null;
   credentials: ICredentials | null;
 }
 
+const token = localStorage.getItem('credentials');
+
 const initialState: IAuthState = {
   user: null,
-  credentials: JSON.parse(localStorage.getItem('credentials') || '{}'),
+  credentials: token ? JSON.parse(token) : null,
 };
 
 export const userSlice = createSlice({

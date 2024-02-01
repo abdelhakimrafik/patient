@@ -24,7 +24,7 @@ const customFetchBase: BaseQueryFn<
   const isArgsString = typeof args === 'string';
   const { headers, ...rest } = isArgsString ? { headers: {} } : args;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const token = (api.getState() as any).authState.credentials.access_token;
+  const token = (api.getState() as any).authState.credentials?.access_token;
   const config: FetchArgs = {
     url: isArgsString ? args : args.url,
     headers: {

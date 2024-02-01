@@ -18,15 +18,28 @@ export const authApi = createApi({
         };
       },
     }),
+    signupUser: builder.mutation<void, TLoginFormData>({
+      query(data) {
+        return {
+          url: 'auth/signup',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
     logoutUser: builder.mutation<void, void>({
       query() {
         return {
           url: 'auth/signout',
-          credentials: 'include',
+          method: 'POST',
         };
       },
     }),
   }),
 });
 
-export const { useLoginUserMutation, useLogoutUserMutation } = authApi;
+export const {
+  useLoginUserMutation,
+  useSignupUserMutation,
+  useLogoutUserMutation,
+} = authApi;

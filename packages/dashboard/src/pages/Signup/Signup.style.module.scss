@@ -18,13 +18,6 @@
     font-weight: 500;
   }
 
-  .select {
-    color: #1aa5c0;
-    border-width: 1.7px;
-    border-color: #50799e;
-    font-weight: 500;
-  }
-
   .submitBtn {
     margin-block-start: 15px;
     background: linear-gradient(109deg, #20a8d3 5.8%, #01d1ff 122.34%);
@@ -37,6 +30,7 @@
   .error {
     font-size: 14px;
     color: red;
+    text-transform: capitalize;
   }
 
   .link {
