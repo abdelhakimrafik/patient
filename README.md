@@ -23,6 +23,9 @@ This monorepo houses two distinct applications that collectively manage patient 
 - **RTK Query**: Simplified data fetching and caching with RTK Query, streamlining API interactions.
 - **Integration with NestJS API**: Seamlessly integrates with the NestJS API for data retrieval and manipulation.
 
+## System Class Diagram
+![image](https://github.com/abdelhakimrafik/patient/assets/62836886/6beadc93-7ccb-4ea4-a665-f32daf49394d)
+
 ## Instructions
 
 ### Getting Started
