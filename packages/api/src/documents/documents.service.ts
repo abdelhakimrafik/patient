@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { ILike, Repository } from 'typeorm';
-import { Document } from './document.entity';
-import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
-import { PageDto } from 'src/common/dto/page.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ILike, Repository } from 'typeorm';
+import { Document } from './entities/document.entity';
 import { PageService } from 'src/common/services/page.service';
-import { CreateDocumentDto } from './dto/createDocument.dto';
+import { PageFilterDto } from 'src/common/dto/page-filter.dto';
+import { PageDto } from 'src/common/dto/page.dto';
+import { CreateDocumentDto } from './dto/create-document.dto';
 import { PatientsService } from 'src/patients/patients.service';
 
 @Injectable()

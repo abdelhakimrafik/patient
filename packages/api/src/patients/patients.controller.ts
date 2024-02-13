@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { PatientsService } from './patients.service';
-import { CreatePatientDto } from './dto/createPatient.dot';
-import { UpdatePatientDto } from './dto/updatePatient.dto';
-import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
+import { CreatePatientDto } from './dto/create-patient.dot';
+import { UpdatePatientDto } from './dto/update-patient.dto';
+import { PageFilterDto } from 'src/common/dto/page-filter.dto';
 
 @ApiBearerAuth('access-token')
 @Controller('patients')

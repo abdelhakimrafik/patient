@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentsController } from './documents.controller';
 import { DocumentsService } from './documents.service';
-import { Document } from './document.entity';
+import { Document } from './entities/document.entity';
 import { PatientsModule } from 'src/patients/patients.module';
 
 @Module({

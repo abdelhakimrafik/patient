@@ -1,98 +1,81 @@
-import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as bcrypt from 'bcrypt';
+import { ConfigService } from '@nestjs/config';
 import { randomUUID } from 'crypto';
-import jwtConfig from 'src/config/jwt.config';
+import { LoginResponseDto } from './dto/login.response.dto';
 import { UsersService } from 'src/users/users.service';
-import { SignInDto } from './dto/signIn.dto';
-import { SignUpDto } from './dto/signUp.dto';
-import { RedisService } from 'src/redis/redis.service';
+import { User } from 'src/users/entities/user.entity';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { RedisService } from 'src/database/redis/redis.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @Inject(jwtConfig.KEY)
-    private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
     private readonly redisService: RedisService,
   ) {}
 
-  async signIn(signInDto: SignInDto) {
-    const { email, password } = signInDto;
-    const user = await this.usersService.findByEmail(email);
+  async login(user: User): Promise<LoginResponseDto> {
+    return {
+      user: user,
+      tokens: await this.generateTokens(user.id.toString()),
+    };
+  }
 
-    if (!user) {
-      throw new UnauthorizedException();
+  async register(user: CreateUserDto): Promise<User> {
+    return await this.usersService.create(user);
+  }
+
+  async logout(userId: string): Promise<void> {
+    await this.redisService.delete(`refresh-${userId}`);
+  }
+
+  async validateUser(email: string, password: string): Promise<User | null> {
+    const user = await this.usersService.findOneByEmail(email);
+    if (user) {
+      const passwordMatch = await user.validatePassword(password);
+      if (passwordMatch) {
+        return user;
+      }
     }
-
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordMatch) {
-      throw new UnauthorizedException();
-    }
-
-    return await this.generateAuthorizationTokens(user.id);
+    return null;
   }
 
-  async signUp(signUpDto: SignUpDto) {
-    return await this.usersService.create(signUpDto);
-  }
-
-  async signOut(userId: string): Promise<void> {
-    this.redisService.delete(`user-${userId}`);
-  }
-
-  async refreshToken(refreshToken: string) {
-    const { id, tokenId } = await this.jwtService.verifyAsync(refreshToken, {
-      secret: this.jwtConfiguration.secret,
-    });
-
-    const isValidToken = await this.redisService.validate(
-      `refresh-${id}`,
-      tokenId,
-    );
-    if (!isValidToken) {
-      throw new UnauthorizedException('Refresh token is not valid');
-    }
-
-    return await this.generateAuthorizationTokens(id);
-  }
-
-  private async generateAuthorizationTokens(userId: string) {
-    const access_token = await this.generateToken(
-      'user',
-      userId,
-      { id: userId },
-      this.jwtConfiguration.signOptions.expiresIn,
-    );
-    const refresh_token = await this.generateToken(
-      'refresh',
-      userId,
-      { id: userId },
-      this.jwtConfiguration.refreshExpiresIn,
-    );
-
-    return { access_token, refresh_token };
-  }
-
-  private async generateToken(
-    prefix: string,
+  async validateRefreshToken(
     userId: string,
-    payload: Record<string, string>,
-    expiresIn: string | number,
-  ) {
-    const tokenId = randomUUID();
-    await this.redisService.insert(`${prefix}-${userId}`, tokenId);
+    tokenId: string,
+  ): Promise<boolean> {
+    return await this.redisService.validate(`refresh-${userId}`, tokenId);
+  }
 
-    const token = await this.jwtService.signAsync(
-      { ...payload, tokenId },
+  async generateTokens(userId: string) {
+    const accessToken = this.generateAccessToken(userId);
+    const [refreshToken, refreshTokenId] = this.generateRefreshToken(userId);
+
+    /** Save refresh token to redis database */
+    await this.redisService.insert(`refresh-${userId}`, refreshTokenId);
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  private generateAccessToken(userId: string) {
+    return this.jwtService.sign({ sub: userId });
+  }
+
+  private generateRefreshToken(userId: string) {
+    const tokenId = randomUUID();
+    const token = this.jwtService.sign(
+      { sub: userId, tokenId },
       {
-        secret: this.jwtConfiguration.secret,
-        expiresIn,
+        secret: this.configService.get<string>('jwt.refreshSecret'),
+        expiresIn: this.configService.get<string>('jwt.refreshTokenTTL'),
       },
     );
-    return token;
+    return [token, tokenId];
   }
 }

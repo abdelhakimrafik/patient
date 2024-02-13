@@ -1,41 +1,46 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { LoginDto } from './dto/login.dto';
+import { LoginResponseDto } from './dto/login.response.dto';
+import { TokensResponseDto } from './dto/tokens.response.dto';
+import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { AuthService } from './auth.service';
-import { SignInDto } from './dto/signIn.dto';
-import { SignUpDto } from './dto/signUp.dto';
+import { ActiveUser } from './decorators/active-user.decorator';
 import { Public } from './decorators/public.decorator';
-import { ActiveUser } from 'src/common/decorators/activeUser.decorator';
+import { User } from 'src/users/entities/user.entity';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { RefreshTokenDto } from './dto/refreshToken.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('signin')
-  signIn(@Body() signInDto: SignInDto) {
-    return this.authService.signIn(signInDto);
+  @UseGuards(LocalAuthGuard)
+  @Post('login')
+  async login(
+    @Body() loginDto: LoginDto,
+    @ActiveUser() user: User,
+  ): Promise<LoginResponseDto> {
+    return await this.authService.login(user);
   }
 
   @Public()
-  @HttpCode(HttpStatus.CREATED)
-  @Post('signup')
-  signUp(@Body() signUpDto: SignUpDto) {
-    return this.authService.signUp(signUpDto);
+  @Post('register')
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return await this.authService.register(createUserDto);
   }
 
   @Public()
-  @HttpCode(HttpStatus.OK)
+  @UseGuards(JwtRefreshGuard)
   @Post('refresh')
-  refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
-    return this.authService.refreshToken(refreshTokenDto.token);
+  async refreshToken(@ActiveUser('id') id: string): Promise<TokensResponseDto> {
+    return await this.authService.generateTokens(id);
   }
 
   @ApiBearerAuth('access-token')
-  @HttpCode(HttpStatus.OK)
-  @Post('signout')
-  signOut(@ActiveUser('id') userId: string) {
-    return this.authService.signOut(userId);
+  @Post('logout')
+  async logout(@ActiveUser('id') id: string): Promise<void> {
+    await this.authService.logout(id);
   }
 }

@@ -1,7 +1,8 @@
-import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { Controller, Delete, Get, HttpCode, HttpStatus } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { ActiveUser } from 'src/common/decorators/activeUser.decorator';
+import { User } from './entities/user.entity';
+import { ActiveUser } from 'src/auth/decorators/active-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth('access-token')
 @Controller('users')
@@ -10,7 +11,13 @@ export class UsersController {
 
   @HttpCode(HttpStatus.OK)
   @Get('me')
-  getMe(@ActiveUser('id') userId: string) {
-    return this.usersService.findOne(userId);
+  async getCurrentUser(@ActiveUser() user: User): Promise<User> {
+    return user;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Delete()
+  async deleteCurrentUser(@ActiveUser('id') userId: string): Promise<boolean> {
+    return await this.usersService.delete(userId);
   }
 }

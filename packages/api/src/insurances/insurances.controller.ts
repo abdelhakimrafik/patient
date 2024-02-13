@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { InsurancesService } from './insurances.service';
-import { CreateInsuranceDto } from './dto/createInsurance.dto';
+import { CreateInsuranceDto } from './dto/create-insurance.dto';
 
 @ApiBearerAuth('access-token')
 @Controller('insurances')

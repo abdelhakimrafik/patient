@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { Patient } from './patient.entity';
-import { UpdatePatientDto } from './dto/updatePatient.dto';
-import { CreatePatientDto } from './dto/createPatient.dot';
-import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
+import { Patient } from './entities/patient.entity';
+import { UpdatePatientDto } from './dto/update-patient.dto';
+import { CreatePatientDto } from './dto/create-patient.dot';
+import { PageFilterDto } from 'src/common/dto/page-filter.dto';
 import { PageService } from 'src/common/services/page.service';
 import { PageDto } from 'src/common/dto/page.dto';
 import { InsurancesService } from 'src/insurances/insurances.service';
@@ -57,8 +57,13 @@ export class PatientsService extends PageService {
     id: string,
     updatePatientDto: UpdatePatientDto,
   ): Promise<Patient> {
+    const { insurance: insuranceId, ...patientData } = updatePatientDto;
     const updatePatient = await this.patientRepository.findOneBy({ id });
-    this.patientRepository.merge(updatePatient, updatePatientDto);
+    if (insuranceId) {
+      patientData['insurance'] =
+        await this.insurancesService.findOne(insuranceId);
+    }
+    this.patientRepository.merge(updatePatient, patientData);
     return await this.patientRepository.save(updatePatient);
   }
 

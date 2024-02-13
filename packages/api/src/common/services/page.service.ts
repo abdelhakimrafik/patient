@@ -4,8 +4,8 @@ import {
   FindOptionsWhere,
   Repository,
 } from 'typeorm';
-import { PageFilterDto } from '../dto/pageFilter.dto';
-import { SortOrder } from '../enum/sortOrder.enum';
+import { PageFilterDto } from '../dto/page-filter.dto';
+import { SortOrder } from '../enums/sort-order.enum';
 import { PageDto } from '../dto/page.dto';
 
 type PaginateParams<T> = {

@@ -7,10 +7,10 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { DocumentsService } from './documents.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { PageFilterDto } from 'src/common/dto/pageFilter.dto';
-import { CreateDocumentDto } from './dto/createDocument.dto';
+import { DocumentsService } from './documents.service';
+import { CreateDocumentDto } from './dto/create-document.dto';
+import { PageFilterDto } from 'src/common/dto/page-filter.dto';
 
 @ApiBearerAuth('access-token')
 @Controller('documents')
